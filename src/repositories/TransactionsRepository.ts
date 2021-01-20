@@ -20,7 +20,6 @@ class TransactionsRepository {
   }
 
   public all(): Transaction[] {
-    this.transactions = this.getBalance();
     return this.transactions;
   }
 
@@ -32,14 +31,10 @@ class TransactionsRepository {
     this.transactions.forEach((data, index) => {
       if (data.type === 'income') {
         incomeValue += data.value;
-      } else {
+      } else if (data.type === 'outcome') {
         outcomeValue += data.value;
       }
     });
-
-    if (outcomeValue > incomeValue ) {
-      throw Error('outcome value is greater of our income');
-    }
 
     const balance = {
       income: incomeValue,
@@ -47,11 +42,7 @@ class TransactionsRepository {
       total: incomeValue - outcomeValue,
     };
 
-    console.log('income',incomeValue);
-    console.log('outcome',outcomeValue);
-
     return balance;
-
   }
 
   public create({ title, value, type }: TransactionDTO): Transaction {
